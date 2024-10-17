@@ -1,0 +1,14 @@
+.user-item {
+  width: calc(45% - 2rem);
+  min-width: 17.5rem;
+}
+/* .user-item__info h2 {
+  color: #ffd900;
+} */
+
+.user-item:hover h2,
+.user-item:active h2,
+.user-item:hover h3,
+.user-item:active h3 {
+  color: #292929;
+}

@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import UserItem from "./UserItem";
+import "./UsersList.css";
 
 const UsersList = (props) => {
   if (props.items.length === 0) {
@@ -10,7 +11,7 @@ const UsersList = (props) => {
     );
   }
   return (
-    <ul className="users-list">
+    <ul className="users-list list-none mx-auto my-0 p-0 flex justify-center flex-wrap">
       {props.items.map((user) => {
         return (
           <UserItem
