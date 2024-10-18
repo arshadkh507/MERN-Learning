@@ -1,0 +1,21 @@
+/* .main-navigation__menu-btn {
+  
+} */
+
+.main-navigation__menu-btn span {
+  height: 2.5px;
+}
+
+.main-navigation__header-nav {
+  display: none;
+}
+
+.main-navigation__drawer-nav {
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .main-navigation__header-nav {
+    display: block;
+  }
+}

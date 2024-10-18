@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
+import Card from "../../shared/components/UIElements/Card";
 import UserItem from "./UserItem";
 import "./UsersList.css";
 
 const UsersList = (props) => {
   if (props.items.length === 0) {
     return (
-      <div className="center">
-        <h2>No Users Found!</h2>
+      <div className="text-center flex justify-center items-center">
+        <Card>
+          <h2>No Users Found!</h2>
+        </Card>
       </div>
     );
   }
