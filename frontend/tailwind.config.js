@@ -13,6 +13,13 @@ export default {
       },
       width: {
         70: "70%",
+        90: "90%",
+      },
+      height: {
+        125: "12.5rem",
+      },
+      maxWidth: {
+        402: "40rem",
       },
     },
   },
