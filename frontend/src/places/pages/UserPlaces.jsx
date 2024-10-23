@@ -28,6 +28,7 @@ const dummyPlaces = [
     creator: "u2",
   },
 ];
+
 const UserPlaces = () => {
   const userId = useParams().userId;
 

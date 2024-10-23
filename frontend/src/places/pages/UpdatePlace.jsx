@@ -7,6 +7,8 @@ import {
 } from "../../shared/utils/validators";
 import "./PlaceForm.css";
 import { useForm } from "../../shared/hooks/form-hook";
+import { useEffect, useState } from "react";
+import Card from "../../shared/components/UIElements/Card";
 const dummyPlaces = [
   {
     id: "p1",
@@ -38,26 +40,59 @@ const dummyPlaces = [
 const UpdatePlace = () => {
   const { placeId } = useParams();
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const identifiedPlace = dummyPlaces.find((place) => place.id === placeId);
 
-  const [formState, inputHandler] = useForm(
+  const [formState, inputHandler, setFormData] = useForm(
     {
       title: {
-        value: identifiedPlace.title,
-        valid: true,
+        value: "",
+        valid: false,
       },
       description: {
-        value: identifiedPlace.description,
-        valid: true,
+        value: "",
+        valid: false,
       },
     },
     true
   );
 
+  useEffect(() => {
+    if (identifiedPlace) {
+      setFormData(
+        {
+          title: {
+            value: identifiedPlace.title,
+            valid: true,
+          },
+          description: {
+            value: identifiedPlace.description,
+            valid: true,
+          },
+        },
+        true
+      );
+    }
+    setIsLoading(false);
+  }, [setFormData, identifiedPlace]);
+
+  if (isLoading) {
+    return (
+      <div className="center">
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
+
   if (!identifiedPlace) {
-    <div className="center">
-      <h2>Could not find place!</h2>
-    </div>;
+    return (
+      <div className="center">
+        <Card>
+          <h2>Could not find place!</h2>
+        </Card>
+      </div>
+    );
   } else {
     console.log(identifiedPlace);
   }
@@ -68,35 +103,37 @@ const UpdatePlace = () => {
   };
 
   return (
-    <form
-      className="place-form list-none my-0 mx-auto p-4 w-90 max-w-402 rounded-md bg-white"
-      onSubmit={placeUpdateSubmitHandler}
-    >
-      <Input
-        id="title"
-        element="input"
-        type="text"
-        lable="Title"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter valid title."
-        onInput={inputHandler}
-        initialValue={formState.inputs.title.value}
-        initialValid={formState.inputs.title.isValid}
-      />
-      <Input
-        id="description"
-        element="textarea"
-        lable="Description"
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText="Please enter valid description (atleast 5 characters long)."
-        onInput={inputHandler}
-        initialValue={formState.inputs.description.value}
-        initialValid={formState.inputs.description.isValid}
-      />
-      <Button type="submit" disabled={!formState.isValid}>
-        Update Place
-      </Button>
-    </form>
+    formState.inputs.title.value && (
+      <form
+        className="place-form list-none my-0 mx-auto p-4 w-90 max-w-402 rounded-md bg-white"
+        onSubmit={placeUpdateSubmitHandler}
+      >
+        <Input
+          id="title"
+          element="input"
+          type="text"
+          lable="Title"
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="Please enter valid title."
+          onInput={inputHandler}
+          initialValue={formState.inputs.title.value}
+          initialValid={formState.inputs.title.isValid}
+        />
+        <Input
+          id="description"
+          element="textarea"
+          lable="Description"
+          validators={[VALIDATOR_MINLENGTH(5)]}
+          errorText="Please enter valid description (atleast 5 characters long)."
+          onInput={inputHandler}
+          initialValue={formState.inputs.description.value}
+          initialValid={formState.inputs.description.isValid}
+        />
+        <Button type="submit" disabled={!formState.isValid}>
+          Update Place
+        </Button>
+      </form>
+    )
   );
 };
 

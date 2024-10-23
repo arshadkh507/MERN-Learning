@@ -7,10 +7,24 @@ import Modal from "../../shared/components/UIElements/Modal";
 import Map from "../../shared/components/UIElements/Map";
 const PlaceItem = (props) => {
   const [showMap, setShowMap] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const openMaphandler = () => setShowMap(true);
 
   const closeMaphandler = () => setShowMap(false);
+
+  const showDeleteWarningHandler = () => {
+    setShowConfirmModal(true);
+  };
+
+  const cancelDeleteHandler = () => {
+    setShowConfirmModal(false);
+  };
+
+  const confirmDeleteHandler = () => {
+    console.log("Deleting...");
+    setShowConfirmModal(false);
+  };
 
   return (
     <>
@@ -25,6 +39,27 @@ const PlaceItem = (props) => {
         <div className="map-container">
           <Map />
         </div>
+      </Modal>
+      <Modal
+        show={showConfirmModal}
+        onCancel={cancelDeleteHandler}
+        header="Are you sure?"
+        footerClass="place-item__modal-actions"
+        footer={
+          <>
+            <Button inverse onClick={cancelDeleteHandler}>
+              Cancle
+            </Button>
+            <Button danger onClick={confirmDeleteHandler}>
+              Delete
+            </Button>
+          </>
+        }
+      >
+        <p>
+          Do you want to proceed and delete this place? Please note that it
+          can&apos;t be undone thereafter.
+        </p>
       </Modal>
       <li className="place-item my-4 mx-0">
         <Card className="place-item__content p-0">
@@ -45,7 +80,9 @@ const PlaceItem = (props) => {
               View on Map{" "}
             </Button>
             <Button to={`/places/${props.id}`}>Edit </Button>
-            <Button danger>Delete </Button>
+            <Button danger onClick={showDeleteWarningHandler}>
+              Delete{" "}
+            </Button>
           </div>
         </Card>
       </li>
@@ -54,15 +91,3 @@ const PlaceItem = (props) => {
 };
 
 export default PlaceItem;
-
-{
-  /* <button className="border border-solid border-gray-600 p-1 rounded m-2">
-            View on Map
-          </button>
-          <button className="border border-solid border-gray-600 p-1 rounded m-2">
-            Edit
-          </button>
-          <button className="border border-solid border-gray-600 p-1 rounded m-2">
-            Delete
-          </button> */
-}
