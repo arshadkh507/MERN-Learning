@@ -6,26 +6,50 @@ import UserPlaces from "./places/pages/UserPlaces";
 import UpdatePlace from "./places/pages/UpdatePlace";
 import Authentication from "./user/pages/Authentication";
 
-const App = () => {
-  return (
-    <>
-      <MainNavigation />
-      <main className="mt-20">
-        <Routes>
-          <Route path="/" element={<h1>Home Page: Let&apos;s start</h1>} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/places/new" element={<NewPlace />} />
-          <Route path="/:userId/places" element={<UserPlaces />} />
-          <Route path="/places/:placeId" element={<UpdatePlace />} />
-          <Route path="/auth" element={<Authentication />} />
+import { AuthContext } from "./shared/context/auth-context";
+import { useCallback, useState } from "react";
 
-          {/* ! Redirect */}
-          {/* <Route path="*" element={<h1>NOT FOUND! THIS PAGE</h1>} /> */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </main>
-    </>
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const login = useCallback(() => {
+    setIsLoggedIn(true);
+  }, []);
+
+  const logout = useCallback(() => {
+    setIsLoggedIn(false);
+  }, []);
+
+  let routes;
+
+  if (isLoggedIn) {
+    routes = (
+      <Routes>
+        <Route path="/" element={<Users />} />
+        <Route path="/:userId/places" element={<UserPlaces />} />
+        <Route path="/places/new" element={<NewPlace />} />
+        <Route path="/places/:placeId" element={<UpdatePlace />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    );
+  } else {
+    routes = (
+      <Routes>
+        <Route path="/" element={<Users />} />
+        <Route path="/:userId/places" element={<UserPlaces />} />
+        <Route path="/auth" element={<Authentication />} />
+        <Route path="*" element={<Navigate to="/auth" />} />
+      </Routes>
+    );
+  }
+
+  return (
+    <AuthContext.Provider
+      value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}
+    >
+      <MainNavigation />
+      <main className="mt-20">{routes}</main>
+    </AuthContext.Provider>
   );
 };
-
 export default App;
