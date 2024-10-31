@@ -5,6 +5,7 @@ const placesRoutes = require("./routes/places-routes.js");
 const usersRoutes = require("./routes/users-routes.js");
 
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use("/api/places", placesRoutes);
 
