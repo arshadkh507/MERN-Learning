@@ -1,30 +1,18 @@
 const express = require("express");
-
+const { getUsers, signup, login } = require("../controllers/users-controller");
 const router = express.Router();
+const { check } = require("express-validator");
 
-const dummyPlaces = [
-  {
-    id: "p1",
-    title: "Islamia College Peshawar",
-    description: "beautiful old university",
-    location: {
-      lat: 33.9996942,
-      lng: 71.4760242,
-    },
-    address: "Grand Trunk Rd, Rahat Abad, Peshawar, Khyber Pakhtunkhwa",
-    creator: "u1",
-  },
-];
-
-router.get("/:userId", (req, res, next) => {
-  console.log("recieve get in user routes");
-  const { userId } = req.params;
-
-  const data = dummyPlaces.find(
-    (currentPlace, index, placesArr) => currentPlace.creator === userId
-  );
-
-  res.json(data);
-});
+router.get("/", getUsers);
+router.post(
+  "/signup",
+  [
+    check("name").not().isEmpty(),
+    check("email").normalizeEmail().isEmail(),
+    check("password").isLength({ min: 6 }),
+  ],
+  signup
+);
+router.post("/login", login);
 
 module.exports = router;
